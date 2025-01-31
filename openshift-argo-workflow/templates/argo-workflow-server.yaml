@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-server
+  namespace: {{ .Values.argo-workflows }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo-server
+  template:
+    metadata:
+      labels:
+        app: argo-server
+    spec:
+      serviceAccountName: argo
+      containers:
+        - name: argo-server
+          image: argoproj/argocli:v3.4.0 # Update version as needed
+          command: ["argo", "server"]
+          args: ["--auth-mode=server"]
+          ports:
+            - containerPort: 2746
